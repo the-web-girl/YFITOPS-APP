@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Yfitops — Écoutez de la musique partout</title>
+  <meta name="description" content="Yfitops, un clone accessible de Spotify en HTML/CSS/JS (WCAG AA), responsive, sans dépendances." />
+  <meta name="theme-color" content="#0f172a" />
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <a href="#main" class="sr-only" id="skip-link">Aller au contenu</a>
+
+  <div class="app" data-theme="dark">
+    <nav class="sidebar" aria-label="Navigation principale">
+      <div class="nav-section">
+        <div class="nav-title">Yfitops</div>
+        <a class="nav-link" href="#home" aria-current="page">
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 9.75 12 3l9 6.75V21a1.5 1.5 0 0 1-1.5 1.5H4.5A1.5 1.5 0 0 1 3 21V9.75Z"/></svg>
+          <span>Accueil</span>
+        </a>
+        <a class="nav-link" href="#search">
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M10 18a8 8 0 1 1 6.32-3.1l4.39 4.39-1.41 1.41-4.39-4.39A8 8 0 0 1 10 18Z"/></svg>
+          <span>Rechercher</span>
+        </a>
+        <a class="nav-link" href="#library">
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h4v16H4zM10 4h4v16h-4zM16 4h4v16h-4z"/></svg>
+          <span>Bibliothèque</span>
+        </a>
+      </div>
+      <div class="nav-section">
+        <div class="nav-title">Playlists</div>
+        <a class="nav-link" href="#picks"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h10v2H4z"/></svg><span>Coups de cœur</span></a>
+        <a class="nav-link" href="#focus"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 2 7l10 5 10-5-10-5zm0 7-10 5 10 5 10-5-10-5z"/></svg><span>Focus</span></a>
+      </div>
+    </nav>
+
+    <header role="banner">
+      <div class="brand" aria-label="Yfitops, aller à l'accueil">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2Zm4.95 14.536a1 1 0 0 1-1.415.05 9.16 9.16 0 0 0-2.86-1.79 14.89 14.89 0 0 0-3.63-.896 1 1 0 0 1 .274-1.986 16.943 16.943 0 0 1 4.15 1.02 11.129 11.129 0 0 1 3.47 2.173 1 1 0 0 1 .01 1.43ZM17 11a1 1 0 0 1-1.707.707 9.631 9.631 0 0 0-2.147-1.434 13.676 13.676 0 0 0-3.646-1.105 1 1 0 1 1 .36-1.966 15.5 15.5 0 0 1 4.073 1.233A11.542 11.542 0 0 1 17 11Zm.5-3a1 1 0 0 1-1.707.707A12.3 12.3 0 0 0 13 7.17a1 1 0 1 1 .5-1.936 14.25 14.25 0 0 1 3.086 1.652A1 1 0 0 1 17.5 8Z"/></svg>
+        <strong class="brand-name" aria-hidden="true">Yfitops</strong>
+      </div>
+
+      <form class="search" role="search" aria-label="Rechercher des morceaux ou artistes">
+        <label class="sr-only" for="q">Recherche</label>
+        <input id="q" name="q" type="search" placeholder="Rechercher… (Alt+/)" autocomplete="off" />
+        <span class="icon" aria-hidden="true">⌘K</span>
+      </form>
+
+      <div class="header-actions">
+        <button id="themeBtn" class="btn" type="button" aria-pressed="false" aria-label="Basculer le thème">Thème</button>
+        <button id="loginBtn" class="btn primary" type="button">Se connecter</button>
+      </div>
+    </header>
+
+    <main id="main" role="main">
+      <section class="section" aria-labelledby="s-hero">
+        <h2 id="s-hero">À la une</h2>
+        <div class="cards" id="heroCards" role="list"></div>
+      </section>
+
+      <section class="section" aria-labelledby="s-pop">
+        <h2 id="s-pop">Playlists populaires</h2>
+        <div class="cards" id="popCards" role="list"></div>
+      </section>
+
+      <section class="section" aria-labelledby="s-upload">
+        <h2 id="s-upload">Votre musique</h2>
+        <div class="drop" id="drop" role="region" aria-label="Déposer des fichiers audio ici" tabindex="0">
+          Glissez-déposez des fichiers .mp3/.wav ici ou <label for="file" style="text-decoration: underline; cursor: pointer;">cliquez pour sélectionner</label>.
+          <input id="file" type="file" accept="audio/*" multiple class="sr-only" />
+        </div>
+        <div id="userTracks" class="cards" role="list" aria-label="Titres importés"></div>
+      </section>
+    </main>
+
+    <!-- Player -->
+    <div class="player" role="region" aria-label="Lecteur audio" data-state="paused">
+      <div class="now">
+        <div class="cover" aria-hidden="true" style="width:56px;height:56px;background:var(--bg);border:1px solid var(--border);border-radius:12px;display:grid;place-items:center;">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2Z"/><path d="M9 8l8 4-8 4z" fill="#22c55e"/></svg>
+        </div>
+        <div class="track-text">
+          <div id="nowTitle" class="ellipsis" aria-live="polite">Aucun titre</div>
+          <div id="nowArtist" class="ellipsis" aria-live="polite" style="color:var(--muted)">—</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="transport">
+          <button class="icon-btn" id="shuffleBtn" type="button" aria-pressed="false" aria-label="Activer le mode aléatoire">🔀</button>
+          <button class="icon-btn" id="prevBtn" type="button" aria-label="Piste précédente">⏮</button>
+          <button class="icon-btn" id="playBtn" type="button" aria-label="Lecture (Espace)">▶️</button>
+          <button class="icon-btn" id="nextBtn" type="button" aria-label="Piste suivante">⏭</button>
+          <button class="icon-btn" id="repeatBtn" type="button" aria-pressed="false" aria-label="Activer la répétition">🔁</button>
+        </div>
+        <div class="progress">
+          <span id="currentTime" aria-live="off">0:00</span>
+          <input id="seek" type="range" min="0" max="100" value="0" step="1" aria-label="Position de lecture" />
+          <span id="duration" aria-live="polite">0:00</span>
+        </div>
+      </div>
+
+      <div class="right">
+        <button class="icon-btn" id="muteBtn" type="button" aria-pressed="false" aria-label="Muet">🔈</button>
+        <label for="vol" class="sr-only">Volume</label>
+        <input id="vol" type="range" min="0" max="1" step="0.01" value="0.8" aria-label="Volume" />
+        <div id="a11yLog" class="sr-only" aria-live="polite"></div>
+      </div>
+
+      <audio id="audio" preload="metadata"></audio>
+    </div>
+  </div>
+
+<script src="./script-corr.js"></script>
+</body>
+</html>
