@@ -174,7 +174,14 @@
         artist: 'Mozilla Demo',
         src: 'https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3',
         duration: 3
-      }
+      },
+        {
+        id: 'mamusique2',
+        title: 'Barely Alive',
+        artist: 'Oceans Divide',
+        src: 'assets/Barely Alive.mp3',
+        duration: 196
+        }
     ];
 
     // ======= UI Bootstrap =======
